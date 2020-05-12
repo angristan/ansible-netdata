@@ -1,0 +1,24 @@
+---
+
+- name: Ensure apt-transport-https is installed
+  apt:
+    name: apt-transport-https
+
+- name: Add Netdata apt key
+  apt_key:
+    url: https://packagecloud.io/netdata/netdata/gpgkey
+
+- name: Add Netdata repository
+  apt_repository:
+    repo: "deb https://packagecloud.io/netdata/netdata/{{ ansible_distribution|lower }}/ {{ ansible_distribution_release }} main"
+    filename: netdata
+
+- name: Install Netdata
+  apt:
+    name: netdata
+
+- name: Enable and start netdata systemd unit
+  systemd:
+    name: netdata.service
+    enabled: true
+    state: started
